@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+#   _____               _____
+#  / ____|             / ____|
+# | (___    ___   ___ | |  __  _ __
+#  \___ \  / _ \ / __|| | |_ || '_ \
+#  ____) ||  __/| (__ | |__| || |_) |
+# |_____/  \___| \___| \_____|| .__/
+#                             | |
+#                             |_|
+Resources:
+  SecurityGp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: DefaultRule
+      VpcId: !ImportValue CreateVpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0 }
+        - { IpProtocol: tcp, FromPort: 22, ToPort: 22, CidrIp: 0.0.0.0/0 }
+Outputs:
+  SecurityGpOut:
+    Value: !Ref SecurityGp
+    Export:
+      Name: CreateSecGp
