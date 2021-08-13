@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: 2010-09-09
+#         __                 _
+#        / _|               | |
+#   ___ | |_  _ __   ______ | |_  _ __
+#  / __||  _|| '_ \ |______|| __|| '__|
+# | (__ | |  | | | |        | |_ | |
+#  \___||_|  |_| |_|         \__||_|
+Parameters:
+  EC2InstanceType:
+    Type: String
+    Description: Instance type of cfn-trainning
+    Default: t2.micro
+    AllowedValues: ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "t2.xlarge", "t2.2xlarge"]
+  EC2KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: SSH public key
+    Default: id_rsa
+Resources:
+  # Subnet
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.16.0.0/20
+      VpcId: !ImportValue CreateVpc
+      MapPublicIpOnLaunch: True
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref AWS::Region
+  SubnetRouting:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !ImportValue CreateRouter
+      SubnetId: !Ref Subnet
+  # EC2
+  WebSrv:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-097473abce069b8e9 # Amazon Linux 2
+      InstanceType: !Ref EC2InstanceType
+      KeyName: !Ref EC2KeyName
+      SubnetId: !Ref Subnet
+      SecurityGroupIds:
+        - !ImportValue CreateSecGp
+Outputs:
+  Region:
+    Description: Output Description.
+    Value: !Ref AWS::Region
