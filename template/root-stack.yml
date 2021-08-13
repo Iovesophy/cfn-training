@@ -1,20 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Manage myself verification environment
 Parameters: 
   TemplateVPC:
-    Description: VPC template Object URL
     Type: String
-    Default: ./vpc.yml # todo upload s3
+    Default: ./child_stack_template/vpc.yml # todo upload s3
   TemplateSG:
-    Description: SG template Object URL 
     Type: String
-    Default: ./sec.yml # todo upload s3
+    Default: ./child_stack_template/sec.yml # todo upload s3
 Resources:
   VPC:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Ref TemplateVPC
-  SG:
+  SecurityGp:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Ref TemplateSG
@@ -26,5 +23,5 @@ Outputs:
     Value: !GetAtt VPC.Outputs.VPCId
     Description: VPC CIDR Block
   SSHHTTPSG:
-    Value: !GetAtt SG.Outputs.SGSsHttp
-    Description: SG for ssh and httph
+    Value: !GetAtt SecurityGp.Outputs.SGSsHttp
+    Description: SecurityGp for ssh and httph

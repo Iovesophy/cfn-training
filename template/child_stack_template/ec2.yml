@@ -8,9 +8,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   EC2InstanceType:
     Type: String
-    Description: Instance type of cfn-trainning
     Default: t2.micro
-    AllowedValues: ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "t2.xlarge", "t2.2xlarge"]
   EC2KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: SSH public key
@@ -20,7 +18,7 @@ Resources:
   Subnet:
     Type: AWS::EC2::Subnet
     Properties:
-      CidrBlock: 172.16.0.0/20
+      CidrBlock: 10.1.0.0/20
       VpcId: !ImportValue CreateVpc
       MapPublicIpOnLaunch: True
       AvailabilityZone: !Select
@@ -39,9 +37,9 @@ Resources:
       InstanceType: !Ref EC2InstanceType
       KeyName: !Ref EC2KeyName
       SubnetId: !Ref Subnet
-      SecurityGroupIds:
+      SecurityGroupIds: 
         - !ImportValue CreateSecGp
 Outputs:
   Region:
-    Description: Output Description.
+    Description: Output Region
     Value: !Ref AWS::Region
