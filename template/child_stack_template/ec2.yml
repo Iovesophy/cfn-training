@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
-#         __                 _
-#        / _|               | |
-#   ___ | |_  _ __   ______ | |_  _ __
-#  / __||  _|| '_ \ |______|| __|| '__|
-# | (__ | |  | | | |        | |_ | |
-#  \___||_|  |_| |_|         \__||_|
+#  ______   _____  ___
+# |  ____| / ____||__ \
+# | |__   | |        ) |
+# |  __|  | |       / /
+# | |____ | |____  / /_
+# |______| \_____||____|
 Parameters:
   EC2InstanceType:
     Type: String
@@ -27,7 +27,7 @@ Resources:
   SubnetRouting:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !ImportValue CreateRouter
+      RouteTableId: !ImportValue CreateRoute
       SubnetId: !Ref Subnet
   # EC2
   WebSrv:

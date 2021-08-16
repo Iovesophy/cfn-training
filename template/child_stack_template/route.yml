@@ -1,18 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
 #  _____                 _
 # |  __ \               | |
-# | |__) |  ___   _   _ | |_   ___  _ __
-# |  _  /  / _ \ | | | || __| / _ \| '__|
-# | | \ \ | (_) || |_| || |_ |  __/| |
-# |_|  \_\ \___/  \__,_| \__| \___||_|
+# | |__) |  ___   _   _ | |_   ___
+# |  _  /  / _ \ | | | || __| / _ \
+# | | \ \ | (_) || |_| || |_ |  __/
+# |_|  \_\ \___/  \__,_| \__| \___|
 Resources:
-  Router:
+  Route:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !ImportValue CreateVpc
       Tags:
       - Key: Name
-        Value: cfn-training-router
+        Value: cfn-training-route
   InternetGWAttacher:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -22,14 +22,14 @@ Resources:
     Type: AWS::EC2::Route
     DependsOn: InternetGWAttacher
     Properties:
-      RouteTableId: !Ref Router
+      RouteTableId: !Ref Route
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !ImportValue CreateIgw
 Outputs:
   RouterOut:
-    Value: !Ref Router
+    Value: !Ref Route
     Export:
-      Name: CreateRouter
+      Name: CreateRoute
   IgwAtcOut:
     Value: !Ref InternetGWAttacher
     Export:
