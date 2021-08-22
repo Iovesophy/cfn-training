@@ -6,34 +6,126 @@ AWSTemplateFormatVersion: 2010-09-09
 # | | \ \ | (_) || |_| || |_ |  __/
 # |_|  \_\ \___/  \__,_| \__| \___|
 Resources:
-  Route:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !ImportValue CreateVpc
-      Tags:
-      - Key: Name
-        Value: cfn-training-route
   InternetGWAttacher:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !ImportValue CreateVpc
       InternetGatewayId: !ImportValue CreateIgw
+  InternetGWRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !ImportValue CreateVpc
+      Tags:
+      - Key: Name
+        Value: cfn-training-internet-gw-routetable
   InternetGWRoute:
     Type: AWS::EC2::Route
     DependsOn: InternetGWAttacher
     Properties:
-      RouteTableId: !Ref Route
+      RouteTableId: !Ref InternetGWRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !ImportValue CreateIgw
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: cfn-training-public-route-table
+      VpcId: !ImportValue CreateVpc
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !ImportValue CreateIgw
+      RouteTableId: !Ref PublicRouteTable
+  PrivateRouteTable1a:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: cfn-training-private-route-table-1a
+      VpcId: !ImportValue CreateVpc
+  PrivateRoute1a:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !ImportValue CreateNATGateway1a
+      RouteTableId: !Ref PrivateRouteTable1a
+  PrivateRouteTable1c:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: cfn-training-private-route-table-1c
+      VpcId: !ImportValue CreateVpc
+  PrivateRoute1c:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !ImportValue CreateNATGateway1d
+      RouteTableId: !Ref PrivateRouteTable1c
+  PrivateRouteTable1d:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: cfn-training-private-route-table-1d
+      VpcId: !ImportValue CreateVpc
+  PrivateRoute1d:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !ImportValue CreateNATGateway1d
+      RouteTableId: !Ref PrivateRouteTable1d
+  VPCGatewayEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - !Ref PrivateRouteTable1a
+        - !Ref PrivateRouteTable1c
+        - !Ref PrivateRouteTable1d
+        - !Ref PublicRouteTable
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !ImportValue CreateVpc
+  PublicSubnet1aRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !ImportValue CreatePublicSubnet1a
+  PublicSubnet1cRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !ImportValue CreatePublicSubnet1c
+  PublicSubnet1dRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !ImportValue CreatePublicSubnet1d
+  PrivateSubnet1aRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1a
+      SubnetId: !ImportValue CreatePrivateSubnet1a
+  PrivateSubnet1cRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1c
+      SubnetId: !ImportValue CreatePrivateSubnet1c
+  PrivateSubnet1dRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1d
+      SubnetId: !ImportValue CreatePrivateSubnet1d
 Outputs:
-  RouterOut:
-    Value: !Ref Route
-    Export:
-      Name: CreateRoute
   IgwAtcOut:
     Value: !Ref InternetGWAttacher
     Export:
       Name: CreateIgwAtc
+  IgwRouteTableOut:
+    Value: !Ref InternetGWRouteTable
+    Export:
+      Name: CreateIgwRouteTable
   IgwRouteOut:
     Value: !Ref InternetGWRoute
     Export:

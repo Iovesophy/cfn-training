@@ -1,11 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
+#  _____                 _     _____  _                 _
+# |  __ \               | |   / ____|| |               | |
+# | |__) |  ___    ___  | |_ | (___  | |_   __ _   ___ | | __
+# |  _  /  / _ \  / _ \ | __| \___ \ | __| / _` | / __|| |/ /
+# | | \ \ | (_) || (_) || |_  ____) || |_ | (_| || (__ |   <
+# |_|  \_\ \___/  \___/  \__||_____/  \__| \__,_| \___||_|\_\
 Parameters: 
   TemplateVPC:
     Type: String
     Default: ./child_stack_template/vpc.yml # todo upload s3
   TemplateSG:
     Type: String
-    Default: ./child_stack_template/sec.yml # todo upload s3
+    Default: ./child_stack_template/securitygroup.yml # todo upload s3
 Resources:
   VPC:
     Type: AWS::CloudFormation::Stack
@@ -22,6 +28,3 @@ Outputs:
   VPCId:
     Value: !GetAtt VPC.Outputs.VPCId
     Description: VPC CIDR Block
-  SSHHTTPSG:
-    Value: !GetAtt SecurityGp.Outputs.SGSsHttp
-    Description: SecurityGp for ssh and httph

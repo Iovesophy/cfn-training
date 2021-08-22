@@ -14,7 +14,6 @@ Parameters:
     Description: SSH public key
     Default: id_rsa
 Resources:
-  # Subnet
   Subnet:
     Type: AWS::EC2::Subnet
     Properties:
@@ -27,9 +26,8 @@ Resources:
   SubnetRouting:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !ImportValue CreateRoute
+      RouteTableId: !ImportValue CreateIgwRouteTable
       SubnetId: !Ref Subnet
-  # EC2
   WebSrv:
     Type: AWS::EC2::Instance
     Properties:
