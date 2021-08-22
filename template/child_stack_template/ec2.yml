@@ -1,40 +1,23 @@
 AWSTemplateFormatVersion: 2010-09-09
-#  ______   _____  ___
-# |  ____| / ____||__ \
-# | |__   | |        ) |
-# |  __|  | |       / /
-# | |____ | |____  / /_
-# |______| \_____||____|
+# | __|  __|_  )
+# | _|  (     /   Amazon Linux 2 AMI
+# |___|\___|___|
 Parameters:
   EC2InstanceType:
     Type: String
-    Default: t2.micro
+    Default: t2.nano
   EC2KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: SSH public key
-    Default: id_rsa
+    Default: cfn-training
 Resources:
-  Subnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.1.0.0/20
-      VpcId: !ImportValue CreateVpc
-      MapPublicIpOnLaunch: True
-      AvailabilityZone: !Select
-        - 0
-        - Fn::GetAZs: !Ref AWS::Region
-  SubnetRouting:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !ImportValue CreateIgwRouteTable
-      SubnetId: !Ref Subnet
-  WebSrv:
+  EC2Instance1a:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-097473abce069b8e9 # Amazon Linux 2
+      ImageId: ami-097473abce069b8e9
       InstanceType: !Ref EC2InstanceType
       KeyName: !Ref EC2KeyName
-      SubnetId: !Ref Subnet
+      SubnetId: !ImportValue CreatePublicSubnet1a
       SecurityGroupIds: 
         - !ImportValue CreateSecGp
 Outputs:
