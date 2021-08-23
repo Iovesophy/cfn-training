@@ -28,6 +28,8 @@ aws cloudformation deploy \
     --parameter-overrides \
       TemplateVPC="${S3URL}/vpc.yml" \
       TemplateInternetGateway="${S3URL}/internetgateway.yml" \
-      TemplateSubnetRoute="${S3URL}/subnet-route.yml" \
+      TemplateSubnet="${S3URL}/subnet.yml" \
+      TemplateNatGateway="${S3URL}/natgateway.yml" \
+      TemplateRoute="${S3URL}/route.yml" \
       TemplateSecurityGroup="${S3URL}/securitygroup.yml" \
       TemplateEC2="${S3URL}/ec2.yml"
