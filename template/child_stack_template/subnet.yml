@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: 2010-09-09
+#   _____         _                   _
+#  / ____|       | |                 | |
+# | (___   _   _ | |__   _ __    ___ | |_
+#  \___ \ | | | || '_ \ | '_ \  / _ \| __|
+#  ____) || |_| || |_) || | | ||  __/| |_
+# |_____/  \__,_||_.__/ |_| |_| \___| \__|
+Resources:
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !ImportValue CreateVpc
+      InternetGatewayId: !ImportValue CreateIgw
+  PublicSubnet1a:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      AvailabilityZone: !Sub ${AWS::Region}a
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: cfn-training-publicsubnet1a
+      VpcId: !ImportValue CreateVpc
+  PublicSubnet1c:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      AvailabilityZone: !Sub ${AWS::Region}c
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: cfn-training-publicsubnet1c
+      VpcId: !ImportValue CreateVpc
+  PublicSubnet1d:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      AvailabilityZone: !Sub ${AWS::Region}d
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: cfn-training-publicsubnet1d
+      VpcId: !ImportValue CreateVpc
+  PrivateSubnet1a:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      AvailabilityZone: !Sub ${AWS::Region}a
+      CidrBlock: 10.0.10.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: cfn-training-privatesubnet1a
+      VpcId: !ImportValue CreateVpc
+  PrivateSubnet1c:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      AvailabilityZone: !Sub ${AWS::Region}c
+      CidrBlock: 10.0.11.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: cfn-training-privatesubnet1c
+      VpcId: !ImportValue CreateVpc
+  PrivateSubnet1d:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      AvailabilityZone: !Sub ${AWS::Region}d
+      CidrBlock: 10.0.20.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: cfn-training-privatesubnet1d
+      VpcId: !ImportValue CreateVpc
+Outputs:
+  PublicSubnet1aOut:
+    Value: !Ref PublicSubnet1a
+    Export:
+      Name: CreatePublicSubnet1a
+  PublicSubnet1cOut:
+    Value: !Ref PublicSubnet1c
+    Export:
+      Name: CreatePublicSubnet1c
+  PublicSubnet1dOut:
+    Value: !Ref PublicSubnet1d
+    Export:
+      Name: CreatePublicSubnet1d
+  PrivateSubnet1aOut:
+    Value: !Ref PrivateSubnet1a
+    Export:
+      Name: CreatePrivateSubnet1a
+  PrivateSubnet1cOut:
+    Value: !Ref PrivateSubnet1c
+    Export:
+      Name: CreatePrivateSubnet1c
+  PrivateSubnet1dOut:
+    Value: !Ref PrivateSubnet1d
+    Export:
+      Name: CreatePrivateSubnet1d
