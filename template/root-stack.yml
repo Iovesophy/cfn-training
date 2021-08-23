@@ -10,7 +10,11 @@ Parameters:
     Type: String
   TemplateInternetGateway:
     Type: String
-  TemplateSubnetRoute:
+  TemplateSubnet:
+    Type: String
+  TemplateNatGateway:
+    Type: String
+  TemplateRoute:
     Type: String
   TemplateSecurityGroup:
     Type: String
@@ -26,16 +30,26 @@ Resources:
     Properties:
       TemplateURL: !Ref TemplateInternetGateway
     DependsOn: VPC
-  SubnetRoute:
+  Subnet:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Ref TemplateSubnetRoute
+      TemplateURL: !Ref TemplateSubnet
     DependsOn: InternetGateway
+  NatGateway:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateNatGateway
+    DependsOn: Subnet
+  Route:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateRoute
+    DependsOn: NatGateway
   SecurityGroup:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Ref TemplateSecurityGroup
-    DependsOn: SubnetRoute
+    DependsOn: Route
   EC2:
     Type: AWS::CloudFormation::Stack
     Properties:
