@@ -32,4 +32,5 @@ aws cloudformation deploy \
       TemplateNatGateway="${S3URL}/natgateway.yml" \
       TemplateRoute="${S3URL}/route.yml" \
       TemplateSecurityGroup="${S3URL}/securitygroup.yml" \
-      TemplateEC2="${S3URL}/ec2.yml"
+      TemplateEC2="${S3URL}/ec2.yml" \
+      TemplateELB="${S3URL}/elb.yml"

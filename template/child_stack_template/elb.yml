@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create ELB
+Resources:
+  InternetELB: 
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      LoadBalancerName: cfn-training-elb
+      Scheme: internet-facing
+      CrossZone: true
+      HealthCheck: 
+        Target: "TCP:80"
+        HealthyThreshold: "2"
+        UnhealthyThreshold: "2"
+        Interval: "30"
+        Timeout: "5"
+      Listeners: 
+        - LoadBalancerPort: "80"
+          InstancePort: "80"
+          Protocol: HTTP
+      Instances: 
+        - !ImportValue CreateEC21a
+        - !ImportValue CreateEC21c
+        - !ImportValue CreateEC21d
+      SecurityGroups: 
+        - !ImportValue CreateELBSecGp
+      Subnets: 
+        - Fn::ImportValue: CreatePublicSubnet1a
+        - Fn::ImportValue: CreatePublicSubnet1c
+        - Fn::ImportValue: CreatePublicSubnet1d

@@ -20,7 +20,63 @@ Resources:
       SubnetId: !ImportValue CreatePublicSubnet1a
       SecurityGroupIds: 
         - !ImportValue CreateSecGp
+      UserData: !Base64 | 
+        #! /bin/bash
+        yum update -y
+        amazon-linux-extras install nginx1.12 -y
+        systemctl start nginx
+        systemctl enable nginx
+      Tags:
+        - Key: Name
+          Value: cfn-training-ec2-1a
+  EC2Instance1c:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-097473abce069b8e9
+      InstanceType: !Ref EC2InstanceType
+      KeyName: !Ref EC2KeyName
+      SubnetId: !ImportValue CreatePublicSubnet1c
+      SecurityGroupIds: 
+        - !ImportValue CreateSecGp
+      UserData: !Base64 | 
+        #! /bin/bash
+        yum update -y
+        amazon-linux-extras install nginx1.12 -y
+        systemctl start nginx
+        systemctl enable nginx
+      Tags:
+        - Key: Name
+          Value: cfn-training-ec2-1c
+  EC2Instance1d:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-097473abce069b8e9
+      InstanceType: !Ref EC2InstanceType
+      KeyName: !Ref EC2KeyName
+      SubnetId: !ImportValue CreatePublicSubnet1d
+      SecurityGroupIds: 
+        - !ImportValue CreateSecGp
+      UserData: !Base64 | 
+        #! /bin/bash
+        yum update -y
+        amazon-linux-extras install nginx1.12 -y
+        systemctl start nginx
+        systemctl enable nginx
+      Tags:
+        - Key: Name
+          Value: cfn-training-ec2-1d
 Outputs:
   Region:
-    Description: Output Region
     Value: !Ref AWS::Region
+  EC2Instance1a:
+    Value: !Ref EC2Instance1a
+    Export:
+      Name: CreateEC21a
+  EC2Instance1c:
+    Value: !Ref EC2Instance1c
+    Export:
+      Name: CreateEC21c
+  EC2Instance1d:
+    Value: !Ref EC2Instance1d
+    Export:
+      Name: CreateEC21d
