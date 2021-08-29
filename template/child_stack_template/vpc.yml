@@ -1,4 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
+# __      __
+# \ \    / /
+#  \ \  / /  _ __    ___
+#   \ \/ /  | '_ \  / __|
+#    \  /   | |_) || (__
+#     \/    | .__/  \___|
+#           | |
+#           |_|
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -10,3 +18,8 @@ Resources:
       Tags:
       - Key: Name
         Value: cfn-training-vpc
+Outputs:
+  VpcOut:
+    Value: !Ref VPC
+    Export:
+      Name: CreateVpc

@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: 2010-09-09
+#  _   _         _     _____ __          __
+# | \ | |       | |   / ____|\ \        / /
+# |  \| |  __ _ | |_ | |  __  \ \  /\  / /
+# | . ` | / _` || __|| | |_ |  \ \/  \/ /
+# | |\  || (_| || |_ | |__| |   \  /\  /
+# |_| \_| \__,_| \__| \_____|    \/  \/
+Resources:
+  NATGateway1a:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EIP1a.AllocationId
+      SubnetId: !ImportValue CreatePublicSubnet1a
+      Tags:
+        - Key: Name
+          Value: cfn-training-nat-gateway-1a
+  EIP1a:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: cfn-training-eip-1a
+  NATGateway1c:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EIP1c.AllocationId
+      SubnetId: !ImportValue CreatePublicSubnet1c
+      Tags:
+        - Key: Name
+          Value: cfn-training-nat-gateway-1c
+  EIP1c:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: cfn-training-eip-1c
+  NATGateway1d:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EIP1d.AllocationId
+      SubnetId: !ImportValue CreatePublicSubnet1d
+      Tags:
+        - Key: Name
+          Value: cfn-training-nat-gateway-1d
+  EIP1d:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: cfn-training-eip-1d
+Outputs:
+  NATGateway1aOut:
+    Value: !Ref NATGateway1a
+    Export:
+      Name: CreateNATGateway1a
+  NATGateway1cOut:
+    Value: !Ref NATGateway1c
+    Export:
+      Name: CreateNATGateway1c
+  NATGateway1dOut:
+    Value: !Ref NATGateway1d
+    Export:
+      Name: CreateNATGateway1d

@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: "2010-09-09"
+#  _____                 _     _____  _                 _
+# |  __ \               | |   / ____|| |               | |
+# | |__) |  ___    ___  | |_ | (___  | |_   __ _   ___ | | __
+# |  _  /  / _ \  / _ \ | __| \___ \ | __| / _` | / __|| |/ /
+# | | \ \ | (_) || (_) || |_  ____) || |_ | (_| || (__ |   <
+# |_|  \_\ \___/  \___/  \__||_____/  \__| \__,_| \___||_|\_\
+Parameters: 
+  TemplateVPC:
+    Type: String
+  TemplateInternetGateway:
+    Type: String
+  TemplateSubnet:
+    Type: String
+  TemplateNatGateway:
+    Type: String
+  TemplateRoute:
+    Type: String
+  TemplateSecurityGroup:
+    Type: String
+  TemplateEC2:
+    Type: String
+  TemplateELB:
+    Type: String
+Resources:
+  VPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateVPC
+  InternetGateway:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateInternetGateway
+    DependsOn: VPC
+  Subnet:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateSubnet
+    DependsOn: InternetGateway
+  NatGateway:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateNatGateway
+    DependsOn: Subnet
+  Route:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateRoute
+    DependsOn: NatGateway
+  SecurityGroup:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateSecurityGroup
+    DependsOn: Route
+  EC2:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateEC2
+    DependsOn: SecurityGroup
+  ELB:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateELB
+    DependsOn: EC2
